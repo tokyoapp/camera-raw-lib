@@ -1,0 +1,15 @@
+{
+  "name": "image-processing-engine",
+  "version": "1.0.0",
+  "description": "Fast Image Procesing library for the web",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "gl-matrix": "^3.3.0",
+    "photo-raw-lib": "git+ssh://git@github.com/luckydye/photo-raw-lib.git"
+  }
+}
