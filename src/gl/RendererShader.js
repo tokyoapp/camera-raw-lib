@@ -1,13 +1,5 @@
 export class Shader {
 
-	static jsObjectToGLSLStruct(name, obj) {
-		const str = `struct ${name} {`;
-		for(let key in obj) {
-			str += obj[key] + " " + key;
-		}
-		return str + '}';
-	}
-
 	static vertexSource() { }
 	static fragmentSource() { }
 
@@ -16,13 +8,6 @@ export class Shader {
 
 	get uniforms() { return this._uniforms; }
 	get attributes() { return this._attributes; }
-
-	get source() {
-		return [
-			this.constructor.vertexSource(),
-			this.constructor.fragmentSource()
-		];
-	}
 
 	constructor() {
 		this._vertShader = null;
@@ -42,6 +27,21 @@ export class Shader {
 			material: {},
 			objects: {}
 		};
+
+		this.customUniforms = {};
+
+		this.source = [
+			this.constructor.vertexSource(),
+			this.constructor.fragmentSource()
+		]
+	}
+
+	setVertexSource(fragmentSource) {
+		this.source[0] = fragmentSource;
+	}
+
+	setFragmentSource(fragmentSource) {
+		this.source[1] = fragmentSource;
 	}
 
 	cacheUniform(key, value) {
