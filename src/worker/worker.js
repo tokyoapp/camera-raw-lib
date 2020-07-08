@@ -3,26 +3,6 @@ import { uuidv4 } from '../util.js';
 
 const INSIDE_WORKER = globalThis.constructor.name == "DedicatedWorkerGlobalScope";
 
-if(INSIDE_WORKER) {
-  onmessage = async e => {
-    const action = e.data.action;
-    const id = e.data.id;
-    const args = e.data.args;
-  
-    runFunction(action, args).then(result => {
-      postMessage({ id, result });
-    })
-  }
-}
-
-async function runFunction(action, args) {
-  if (action in functions) {
-    return await functions[action](...args);
-  } else {
-    console.error(`function "${action}" not found`);
-  }
-}
-
 export function wrapWorker(worker) {
 
   worker.do = (action, args = [], transferList = []) => {
@@ -47,4 +27,24 @@ export function wrapWorker(worker) {
   }
 
   return worker;
+}
+
+async function runFunction(action, args) {
+  if (action in functions) {
+    return await functions[action](...args);
+  } else {
+    console.error(`function "${action}" not found`);
+  }
+}
+
+if(INSIDE_WORKER) {
+  onmessage = async e => {
+    const action = e.data.action;
+    const process_id = e.data.id;
+    const args = e.data.args;
+  
+    runFunction(action, args).then(result => {
+      postMessage({ id: process_id, result });
+    })
+  }
 }
