@@ -127,7 +127,7 @@ export class Renderer {
 	constructor(canvas, contextOptions = {
 		alpha: false,
 		premultipliedAlpha: false,
-		antialias: false,
+		antialias: true,
 		preserveDrawingBuffer: true, // possible if using a offscreen canvas
 	}) {
 		if (!canvas) throw "RendererContext: Err: no canvas";

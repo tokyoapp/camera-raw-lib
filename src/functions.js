@@ -3,7 +3,7 @@ import processingSteps from './processing/index.js';
 
 let processing;
 
-export function testWebGL(canvas) {
+export function init(canvas) {
     processing = new ImageProcessing(canvas);
 
     // setup before compile

@@ -4,13 +4,17 @@ export default {
     tint: {
       type: 'float',
       value: 1,
-      min: 0,
-      max: 2,
+      min: .5,
+      max: 1.5,
     }
   },
   glsl: `
     void Tint(inout vec4 outColor) {
-      outColor.r *= tint;
+      float l = luminance(outColor.rgb);
+
+      outColor.r /= tint;
+      outColor.g /= tint;
+      outColor.b *= tint;
     }
   `
 }

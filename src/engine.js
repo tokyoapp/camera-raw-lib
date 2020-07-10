@@ -38,12 +38,19 @@ function makeUI(container, worker) {
 
       container.appendChild(label);
 
+      const defaultValue = attribute.value;
+
       const slider = document.createElement('input');
       slider.type = "range";
       slider.step = 0.00001;
       slider.min = attribute.min;
       slider.max = attribute.max;
       slider.value = attribute.value;
+
+      slider.ondblclick = () => {
+        slider.value = defaultValue;
+        executeAction(worker, 'updatePreview', [step.name + '.' + attr, slider.valueAsNumber]);
+      }
 
       container.appendChild(slider);
 
@@ -71,7 +78,7 @@ function makeUI(container, worker) {
 
   let worker;
   
-  const imageFile = await fetchImageFile('../../node_modules/photo-raw-lib/res/_MG_0002.ARW');
+  const imageFile = await fetchImageFile('../../node_modules/photo-raw-lib/res/_MG_2834.CR2');
   console.log(imageFile);
 
   const data = await imageFile.getImageData();
@@ -86,17 +93,17 @@ function makeUI(container, worker) {
 
     makeUI(container, worker);
 
-    const offscreen = canvas.transferControlToOffscreen();
-    const test = await worker.do('testWebGL', [offscreen], [offscreen]);
     console.info('processing in worker thread');
-
+    
+    const offscreen = canvas.transferControlToOffscreen();
+    executeAction(worker, 'init', [offscreen], [offscreen]);
     executeAction(worker, 'setSourceImage', [data]);
   } else {
     makeUI(container);
     // non worker option example
-    const test = executeAction(worker, 'testWebGL', [canvas]);
     console.info('processing in main thread');
 
+    executeAction(worker, 'init', [canvas]);
     executeAction(worker, 'setSourceImage', [data]);
   }
 
