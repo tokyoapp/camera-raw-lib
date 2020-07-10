@@ -22,14 +22,14 @@ function makeUI(container, engine) {
 
       slider.ondblclick = () => {
         slider.value = defaultValue;
-        engine.execute('updatePreview', [step.name + '.' + attr, slider.valueAsNumber]);
+        engine.setAttribute(step.name + '.' + attr, slider.valueAsNumber);
+      }
+
+      slider.oninput = e => {
+        engine.setAttribute(step.name + '.' + attr, slider.valueAsNumber);
       }
 
       container.appendChild(slider);
-
-      slider.oninput = e => {
-        engine.execute('updatePreview', [step.name + '.' + attr, slider.valueAsNumber]);
-      }
     }
   }
 }

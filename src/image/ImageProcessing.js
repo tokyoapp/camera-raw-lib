@@ -12,7 +12,7 @@ export class ImageProcessing {
     this.renderer = new Renderer(canvas);
   }
 
-  setSourceImage(image) {
+  loadImage(image) {
     if (image.orientation == 8) {
       this.renderer.rotation = 90;
       this.renderer.setResolution(image.height, image.width);

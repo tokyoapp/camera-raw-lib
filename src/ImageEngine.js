@@ -1,64 +1,33 @@
 import { parseImageFile } from './files/index.js';
-import * as functions from './functions.js';
-import { wrapWorker } from './worker/worker.js';
-
-
-async function testWorkerCanvasSupport() {
-	const worker = new Worker('data:application/js,' + escape(`
-		onmessage = function() {
-			const test = 'OffscreenCanvas' in globalThis;
-			postMessage(test);
-		}
-	`));
-
-	return new Promise((resolve) => {
-		worker.onmessage = e => {
-			worker.terminate();
-			resolve(e.data);
-		}
-		worker.postMessage(0);
-	})
-}
-
+import processingSteps from './processing/index.js';
+import { ImageProcessing } from './image/ImageProcessing.js';
 
 export class ImageEngine {
 
   constructor() {
-    this.worker = null;
+    this.processing = null;
   }
 
   async setup(canvas) {
-    if (await testWorkerCanvasSupport()) {
-      this.worker = wrapWorker(
-        new Worker('../src/worker/worker.js', { type: 'module' })
-      );
+    // non worker option example
+    console.info('processing in main thread');
 
-      await this.worker.loadFunctions('../functions.js');
+    this.processing = new ImageProcessing(canvas);
 
-      console.info('processing in worker thread');
-
-      const offscreen = canvas.transferControlToOffscreen();
-      this.execute('init', [offscreen], [offscreen]);
-    } else {
-      // non worker option example
-      console.info('processing in main thread');
-
-      this.execute('init', [canvas]);
+    // setup before compile
+    for(let step of processingSteps) {
+      this.processing.addProcessingStep(step);
     }
   }
 
   async loadImage(blob) {
     const imageFile = await parseImageFile(blob.url, blob);
     const data = await imageFile.getImageData();
-    this.execute('setSourceImage', [data]);
+    this.processing.loadImage(data);
   }
 
-  execute(action, args, transfers = []) {
-    if (this.worker) {
-      this.worker.do(action, args, transfers);
-    } else {
-      functions[action](...args);
-    }
+  setAttribute(path, value) {
+    this.processing.setAttribute(path, value);
   }
 
 }
