@@ -25,15 +25,7 @@ const SCREEN = new Geometry({
 		[1, 1],
 		[0, 1],
 		[0, 0],
-	],
-	normals: [
-		[-1, -1, 0],
-		[1, -1, 0],
-		[1, 1, 0],
-		[1, 1, 0],
-		[-1, 1, 0],
-		[-1, -1, 0],
-	],
+	]
 });
 
 export class Renderer {
@@ -55,6 +47,8 @@ export class Renderer {
 		this.info = {
 			drawTime: 0,
 		};
+
+		this.rotation = 0;
 	}
 
 	clearBuffers() {
@@ -84,6 +78,19 @@ export class Renderer {
 		if(custom) {
 			this.currentShader.setUniforms(custom);
 		}
+
+		const angleToRotateInRadians = this.rotation * Math.PI / 180;
+		const s = Math.sin(angleToRotateInRadians);
+		const c = Math.cos(angleToRotateInRadians);
+
+		this.currentShader.setUniforms({
+			modelMatrix: [
+				c, -s, 0, 0,
+				s, c, 0, 0,
+				0, 0, 1, 0,
+				0, 0, 0, 1,
+			]
+		});
 
 		this.drawGeo(this.screen, this.currentShader.drawmode);
 

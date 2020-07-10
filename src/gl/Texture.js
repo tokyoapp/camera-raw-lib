@@ -37,7 +37,13 @@ export class Texture {
         return defaults;
     }
 
-    constructor(data, width = 1, height = 1, bitsPerSample = 8, flipY = true) {
+    constructor({
+        data, 
+        width = 1, 
+        height = 1, 
+        format, 
+        bitsPerSample = 8
+    } = {}, flipY = true) {
 
         this.uid = uuidv4();
 
@@ -60,27 +66,31 @@ export class Texture {
         this.internal_format = "RGB16F";
         this.format = "RGB";
         this.type = "FLOAT";
+
+        if(format = "RGAB") {
+            this.internal_format = "RGBA16F";
+            this.format = "RGBA";
+            this.type = "FLOAT";
+        }
     }
 
     getImageData() {
+        let floatData;
+
         if(this.bitsPerSample == 8) {
             const data = new Uint8Array(this.data);
-            const floatData = convertToFloatArray(data);
-
-            return new Uint8Array(this.data);
+            floatData = convertToFloatArray(data);
         }
         if(this.bitsPerSample == 16) {
             const data = new Uint16Array(this.data);
-            const floatData = convertToFloatArray(data);
-
-            return floatData;
+            floatData = convertToFloatArray(data);
         }
         if(this.bitsPerSample == 32) {
             const data = new Uint32Array(this.data);
-            const floatData = convertToFloatArray(data);
-
-            return floatData;
+            floatData = convertToFloatArray(data);
         }
+
+        return floatData;
     }
 
 }

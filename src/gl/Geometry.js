@@ -6,7 +6,6 @@ export class Geometry extends Transform {
 		return [
 			{ size: 3, attribute: "aPosition" },
 			{ size: 2, attribute: "aTexCoords" },
-			{ size: 3, attribute: "aNormal" },
 		];
 	}
 
@@ -14,7 +13,6 @@ export class Geometry extends Transform {
 		return {
 			vertecies: [],
 			uvs: [],
-			normals: [],
 		};
 	}
 
@@ -38,7 +36,6 @@ export class Geometry extends Transform {
 			indecies = null,
 			vertecies = null,
 			uvs = null,
-			normals = null,
 			scale = this.scale,
 			uv = this.uv,
 		} = args;
@@ -49,7 +46,6 @@ export class Geometry extends Transform {
 		this.indecies = indecies || vertIndecies;
 		this.vertecies = vertecies || verts.vertecies;
 		this.uvs = uvs || verts.uvs;
-		this.normals = normals || verts.normals;
 		this.uv = uv;
 		this.scale = scale;
 	}
@@ -70,20 +66,7 @@ export class Geometry extends Transform {
 		return new VertexBuffer(
 			this.vertecies.map((v, i) => {
 				const uv = this.uvs[i] || [0, 0];
-				const normal = this.normals[i] || [0, 0, 0];
-
-				return [
-					v[0],
-					v[1],
-					v[2],
-	
-					uv[0],
-					uv[1],
-	
-					normal[0],
-					normal[1],
-					normal[2]
-				];
+				return [ v[0], v[1], v[2], uv[0], uv[1] ];
 			}).flat(),
 			this.indecies,
 			this.constructor.attributes

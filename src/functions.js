@@ -1,6 +1,5 @@
-import { Texture } from './gl/Texture.js';
 import { ImageProcessing } from './image/ImageProcessing.js';
-import { processingSteps } from './processing.js';
+import processingSteps from './processing/index.js';
 
 let processing;
 
@@ -11,12 +10,10 @@ export function testWebGL(canvas) {
     for(let step of processingSteps) {
         processing.addProcessingStep(step);
     }
-
-    processing.draw();
 }
 
-export function setSourceImage(imageData, width, height, bitsPerSample) {
-    processing.setSourceImage(imageData, width, height, bitsPerSample);
+export function setSourceImage(image) {
+    processing.setSourceImage(image);
 }
 
 export function updatePreview(path, value) {
