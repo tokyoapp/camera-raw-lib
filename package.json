@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "camera-remote-lib": "file:../camera-remote-lib",
     "photo-raw-lib": "file:../photo-raw-lib"
   }
 }

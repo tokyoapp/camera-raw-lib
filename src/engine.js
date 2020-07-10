@@ -1,8 +1,24 @@
 import { fetchImageFile } from '../node_modules/photo-raw-lib/index.js';
 import * as functions from './functions.js';
 import processingSteps from './processing/index.js';
-import { testWorkerCanvasSupport } from './util.js';
 import { wrapWorker } from './worker/worker.js';
+
+async function testWorkerCanvasSupport() {
+	const worker = new Worker('data:application/js,' + escape(`
+		onmessage = function() {
+			const test = 'OffscreenCanvas' in globalThis;
+			postMessage(test);
+		}
+	`));
+
+	return new Promise((resolve) => {
+		worker.onmessage = e => {
+			worker.terminate();
+			resolve(e.data);
+		}
+		worker.postMessage(0);
+	})
+}
 
 function executeAction(worker, action, args, transfers = []) {
   if (worker) {
@@ -45,8 +61,8 @@ function makeUI(container, worker) {
   document.body.appendChild(container);
 
   const canvas = document.createElement('canvas');
-  canvas.width = 5400;
-  canvas.height = 5400 / 1.7777;
+  canvas.width = 256;
+  canvas.height = 256;
   canvas.style.maxWidth = "100%";
   canvas.style.background = 'black';
   canvas.style.gridColumn = "2";
@@ -55,7 +71,7 @@ function makeUI(container, worker) {
 
   let worker;
   
-  const imageFile = await fetchImageFile('../../node_modules/photo-raw-lib/res/_MG_2834.CR2');
+  const imageFile = await fetchImageFile('../../node_modules/photo-raw-lib/res/_MG_0002.ARW');
   console.log(imageFile);
 
   const data = await imageFile.getImageData();
@@ -65,6 +81,8 @@ function makeUI(container, worker) {
     worker = wrapWorker(
       new Worker('../src/worker/worker.js', { type: 'module' })
     );
+
+    await worker.loadFunctions('../functions.js');
 
     makeUI(container, worker);
 
