@@ -5,14 +5,8 @@ import CR3File from './CR3.mjs';
 import ARWFile from './ARW.mjs';
 import NEFFile from './NEF.mjs';
 
-export function fetchImageFile(filePath) {
-  return fetch(filePath).then(async res => {
-    const data = await res.arrayBuffer();
-    return parseImageFile(filePath, data);
-  });
-}
-
-export function parseImageFile(filename, data) {
+export async function parseImageFile(filename, blob) {
+  const data = await blob.arrayBuffer();
   const parts = filename.split(".");
   const ending = parts[parts.length-1];
 

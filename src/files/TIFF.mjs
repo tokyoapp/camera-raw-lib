@@ -1,4 +1,4 @@
-import { BinaryFile } from "../node_modules/binary-file-lib/index.mjs";
+import { BinaryFile } from "../../node_modules/binary-file-lib/index.mjs";
 import {
   Compression, 
   FIELDS, 
