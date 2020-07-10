@@ -1,4 +1,4 @@
-import { fetchImageFile } from '../node_modules/photo-raw-lib/index.js';
+import { fetchImageFile } from '../files/index.js';
 import * as functions from './functions.js';
 import processingSteps from './processing/index.js';
 import { wrapWorker } from './worker/worker.js';
@@ -78,7 +78,7 @@ function makeUI(container, worker) {
 
   let worker;
   
-  const imageFile = await fetchImageFile('../../node_modules/photo-raw-lib/res/_MG_2834.CR2');
+  const imageFile = await fetchImageFile('../../res/_MG_2834.CR2');
   console.log(imageFile);
 
   const data = await imageFile.getImageData();

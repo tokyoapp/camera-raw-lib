@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "photo-raw-lib": "file:../photo-raw-lib"
+    "binary-file-lib": "git+ssh://git@github.com/luckydye/binary-file-lib.git"
   }
 }
