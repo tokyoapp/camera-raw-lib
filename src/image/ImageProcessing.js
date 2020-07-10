@@ -12,8 +12,9 @@ export class ImageProcessing {
         this.renderer = new Renderer(canvas);
     }
 
-    setSourceImage(image) {
-        this.renderer.setImage(image);
+    setSourceImage(image, width, height, bitsPerSample) {
+        this.renderer.setResolution(width, height);
+		this.renderer.source = new Texture(image, width, height, bitsPerSample);
         this.draw();
     }
 

@@ -38,7 +38,7 @@ if(INSIDE_WORKER) {
       console.error(`function "${action}" not found`);
     }
   }
-  
+
   onmessage = async e => {
     const action = e.data.action;
     const process_id = e.data.id;

@@ -1,8 +1,8 @@
 export const processingSteps = [
     {
-        name: 'Saturation',
+        name: 'Brightness',
         attributes: {
-            saturation: {
+            brightness: {
                 type: 'float',
                 value: .5,
                 min: 0,
@@ -10,8 +10,8 @@ export const processingSteps = [
             }
         },
         glsl: `
-            void Saturation(inout vec4 outColor) {
-                outColor.r *= saturation;
+            void Brightness(inout vec4 outColor) {
+                outColor *= 4.0 * brightness;
             }
         `
     }

@@ -15,10 +15,10 @@ export function testWebGL(canvas) {
     processing.draw();
 }
 
-export function pushImage(img) {
-    processing.setSourceImage(img);
+export function setSourceImage(imageData, width, height, bitsPerSample) {
+    processing.setSourceImage(imageData, width, height, bitsPerSample);
 }
 
-export function updatePreview(value) {
-    processing.setAttribute('Saturation.saturation', value);
+export function updatePreview(path, value) {
+    processing.setAttribute(path, value);
 }

@@ -23,8 +23,3 @@ export async function testWorkerCanvasSupport() {
 		worker.postMessage(0);
 	})
 }
-
-export function wrapImageFileInTexture(file) {
-	console.warn('not implemented');
-	return new Texture(file);
-}

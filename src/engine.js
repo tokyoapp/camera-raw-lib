@@ -1,8 +1,16 @@
-import * as functions from './functions.js';
-import { wrapWorker } from './worker/worker.js';
-import { testWorkerCanvasSupport } from './util.js';
 import { fetchImageFile } from '../node_modules/photo-raw-lib/index.js';
-import JPEG from '../node_modules/photo-raw-lib/src/JPEG.mjs';
+import * as functions from './functions.js';
+import { processingSteps } from './processing.js';
+import { testWorkerCanvasSupport } from './util.js';
+import { wrapWorker } from './worker/worker.js';
+
+function executeAction(worker, action, args, transfers = []) {
+    if(worker) {
+        worker.do(action, args, transfers);
+    } else {
+        functions[action](...args);
+    }
+}
 
 (async function() {
 
@@ -15,33 +23,34 @@ import JPEG from '../node_modules/photo-raw-lib/src/JPEG.mjs';
     canvas.height = 5400 / 1.7777;
     canvas.style.maxWidth = "100%";
     canvas.style.background = 'lime';
-
     canvas.style.gridColumn = "2";
 
     document.body.appendChild(canvas);
+
+    for(let step of processingSteps) {
+        for(let attr in step.attributes) {
+            const attribute = step.attributes[attr];
     
-    const label = document.createElement('label');
-    label.innerHTML = "Saturation";
+            const label = document.createElement('label');
+            label.innerHTML = attr;
+        
+            container.appendChild(label);
 
-    container.appendChild(label);
-
-    const slider = document.createElement('input');
-    slider.type = "range";
-    slider.min = 0;
-    slider.max = 1;
-    slider.step = 0.01;
-
-    container.appendChild(slider);
-
-    let worker;
-
-    function executeAction(action, args, transfers = []) {
-        if(worker) {
-            worker.do(action, args, transfers);
-        } else {
-            functions[action](...args);
+            const slider = document.createElement('input');
+            slider.type = "range";
+            slider.min = attribute.min;
+            slider.max = attribute.max;
+            slider.step = 0.00001;
+        
+            container.appendChild(slider);
+    
+            slider.oninput = e => {
+                executeAction(worker, 'updatePreview', [step.name + '.' + attr, slider.valueAsNumber]);
+            }
         }
     }
+
+    let worker;
 
     if(await testWorkerCanvasSupport()) {
         worker = wrapWorker(
@@ -49,25 +58,17 @@ import JPEG from '../node_modules/photo-raw-lib/src/JPEG.mjs';
         );
 
         const imageFileData = await fetchImageFile('../../node_modules/photo-raw-lib/res/_MG_2834.CR2');
-        const image = imageFileData.images[0];
-        const img = await JPEG.decompress(image.imageData, image);
+        const image = imageFileData.images[2];
 
         const offscreen = canvas.transferControlToOffscreen();
         const test = await worker.do('testWebGL', [offscreen], [offscreen]);
         console.log('worker thread', test);
-    
-        slider.oninput = e => {
-            executeAction('updatePreview', [slider.valueAsNumber]);
-        }
 
-        worker.do('pushImage', [ await createImageBitmap(img) ]);
+        worker.do('setSourceImage', [ image.imageData, image.width, image.height, image.bitsPerSample[0] ]);
     } else {
+        // non worker option example
         const test = functions.testWebGL(canvas);
         console.log('in main thread', test);
-
-        slider.oninput = e => {
-            executeAction('updatePreview', [slider.valueAsNumber]);
-        }
     }
 
 })()
