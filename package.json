@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "photo-raw-lib": "git+ssh://git@github.com/luckydye/photo-raw-lib.git"
+    "camera-remote-lib": "file:../camera-remote-lib",
+    "photo-raw-lib": "file:../photo-raw-lib"
   }
 }
