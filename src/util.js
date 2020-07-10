@@ -17,6 +17,7 @@ export async function testWorkerCanvasSupport() {
 
 	return new Promise((resolve) => {
 		worker.onmessage = e => {
+			worker.terminate();
 			resolve(e.data);
 		}
 		worker.postMessage(0);
@@ -24,6 +25,6 @@ export async function testWorkerCanvasSupport() {
 }
 
 export function wrapImageFileInTexture(file) {
-	console.warn('no implemented');
+	console.warn('not implemented');
 	return new Texture(file);
 }

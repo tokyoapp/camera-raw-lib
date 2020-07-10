@@ -1,5 +1,3 @@
-import { mat4, vec3, vec4 } from "../../node_modules/gl-matrix/esm/index.js";
-
 export class Vec extends Array {
 
 	toString() {
@@ -12,12 +10,6 @@ export class Vec extends Array {
 			(vec2[1] + vec1[1]) / 2,
 			(vec2[2] + vec1[2]) / 2,
 		);
-	}
-
-	static normal(vec1) {
-		const n1 = new Vec();
-		vec3.normalize(n1, vec1);
-		return n1;
 	}
 
 	static divide(vec1, vec2) {
@@ -95,64 +87,6 @@ export class Vec extends Array {
 
 	subtract(vec) {
 		return Vec.subtract(this, vec);
-	}
-
-	dot(vec) {
-		return vec3.dot(this, vec);
-	}
-
-	normalize() {
-		vec3.normalize(this, this);
-		return this;
-	}
-}
-
-export class Raycast extends Vec {
-
-	constructor(camera, x, y) {
-		super();
-
-		const camPos = camera.position;
-		const width = camera.sensor.width;
-		const height = camera.sensor.height;
-
-		this.origin = new Vec(-camPos.x, -camPos.y, -camPos.z);
-
-		this[0] = (2 * x) / width - 1;
-		this[1] = 1 - (2 * y) / height;
-		this[2] = 1;
-		this[3] = 1;
-
-		this.project(camera.projMatrix, camera.viewMatrix);
-	}
-
-	project(projMatrix, viewMatrix) {
-
-		const projInverse = mat4.create();
-		mat4.invert(projInverse, projMatrix);
-		vec4.transformMat4(this, this, projInverse);
-
-		const viewInverse = mat4.create();
-		mat4.invert(viewInverse, viewMatrix);
-		vec4.transformMat4(this, this, viewInverse);
-
-		vec4.normalize(this, this);
-	}
-
-	distnace(plane, normal) {
-		const a = this.origin.add(plane).dot(normal);
-		const b = this.dot(normal);
-		return - (a / b);
-	}
-
-	hit(plane, normal) {
-		const t = this.distnace(plane, normal);
-		const pos = this.origin.add(this.multiply(new Vec(t, t, t)));
-
-		return {
-			distance: t,
-			position: pos,
-		};
 	}
 }
 

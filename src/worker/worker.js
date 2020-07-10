@@ -29,15 +29,16 @@ export function wrapWorker(worker) {
   return worker;
 }
 
-async function runFunction(action, args) {
-  if (action in functions) {
-    return await functions[action](...args);
-  } else {
-    console.error(`function "${action}" not found`);
-  }
-}
-
 if(INSIDE_WORKER) {
+
+  async function runFunction(action, args) {
+    if (action in functions) {
+      return await functions[action](...args);
+    } else {
+      console.error(`function "${action}" not found`);
+    }
+  }
+  
   onmessage = async e => {
     const action = e.data.action;
     const process_id = e.data.id;

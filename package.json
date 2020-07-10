@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "gl-matrix": "^3.3.0",
     "photo-raw-lib": "git+ssh://git@github.com/luckydye/photo-raw-lib.git"
   }
 }

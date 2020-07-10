@@ -1,5 +1,6 @@
 import { ImageShader } from '../gl/ImageShader.js';
 import { Renderer } from '../gl/Renderer.js';
+import { Texture } from '../gl/Texture.js';
 
 export class ImageProcessing {
     
@@ -9,6 +10,11 @@ export class ImageProcessing {
 
     constructor(canvas) {
         this.renderer = new Renderer(canvas);
+    }
+
+    setSourceImage(image) {
+        this.renderer.setImage(image);
+        this.draw();
     }
 
     draw() {
@@ -37,7 +43,7 @@ export class ImageProcessing {
 
         for(let step of this.processes) {
             if(step.name == name) {
-                step.attributes[attrib] = value;
+                step.attributes[attrib].value = value;
             }
         }
 
@@ -49,11 +55,23 @@ export class ImageProcessing {
     }
 
     generateFragmentShaderSource() {
+        const attributes = [];
+
+        for(let step of this.processes) {
+            const attribs = Object.keys(step.attributes);
+            attributes.push(...attribs.map(attr => {
+                const type = step.attributes[attr].type;
+                return `uniform ${type} ${attr};`;
+            }));
+        }
+
         return `#version 300 es
 
 			precision mediump float;
 			
-			uniform sampler2D imageTexture;
+            uniform sampler2D imageTexture;
+
+            ${attributes}
 
 			in vec2 texCoords;
 
@@ -70,8 +88,6 @@ export class ImageProcessing {
 				);
 
                 oFragColor = vec4(texture(imageTexture, uv));
-
-                oFragColor.r = 1.0;
                 
                 ${this.processes.map(step => {
                     return `${step.name}(oFragColor);`;
@@ -89,7 +105,7 @@ export class ImageProcessing {
 
         for(let step of this.processes) {
             for(let attrib in step.attributes) {
-                uniformValues[attrib] = step.attributes[attrib];
+                uniformValues[attrib] = step.attributes[attrib].value;
             }
         }
     }
