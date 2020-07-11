@@ -7,7 +7,7 @@ export class ImageProcessing {
   constructor(canvas) {
     this.renderer = new Renderer(canvas);
 
-    this.debounceDelay = 30;
+    this.debounceDelay = 1000 / 60;
     this.processes = [];
     this.queued = false;
   }
