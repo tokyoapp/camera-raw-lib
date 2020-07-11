@@ -7,7 +7,7 @@ import {
 } from "./TagTypes.mjs";
 
 export default class DNGFile extends TIFFFile {
-  type = "DNG";
+  get type() { return "DNG"; }
 
   static handleLosslessJPEGImage(tags, image) {
     console.warn("Lossless JPEG");

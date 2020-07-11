@@ -378,8 +378,8 @@ export default class TIFFFile extends BinaryFile {
     return tags;
   }
 
-  type = "TIFF";
-  MAX_RES_IMAGE_INDEX = 0;
+  get type() { return "TIFF"; }
+  get MAX_RES_IMAGE_INDEX() { return 0; }
 
   getTag(fieldId, subifd = 0) {
     return this._ifds[subifd][fieldId];

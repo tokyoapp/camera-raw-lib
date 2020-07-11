@@ -4,12 +4,12 @@ import { Texture } from '../gl/Texture.js';
 
 export class ImageProcessing {
 
-  debounceDelay = 30;
-  processes = [];
-  queued = false;
-
   constructor(canvas) {
     this.renderer = new Renderer(canvas);
+
+    this.debounceDelay = 30;
+    this.processes = [];
+    this.queued = false;
   }
 
   loadImage(image) {
@@ -31,10 +31,12 @@ export class ImageProcessing {
 
     if (!this.queued) {
       this.queued = true;
+
+      this.prepareShader(this.shader);
+      this.renderer.draw();
+
       setTimeout(() => {
         this.queued = false;
-        this.prepareShader(this.shader);
-        this.renderer.draw();
       }, this.debounceDelay);
     }
   }

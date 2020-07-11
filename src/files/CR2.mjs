@@ -1,7 +1,7 @@
 import DNGFile from "./DNG.mjs";
 
 export default class CR2File extends DNGFile {
-  type = "CR2";
+  get type() { return "CR2"; }
 
   static handleJPEGImage(tags, image) {
     image.imageData = image.strips[0];
