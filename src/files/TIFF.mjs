@@ -24,7 +24,7 @@ class Canvas {
   }
 }
 
-const ImageCanvas = 'OffscreenCanvas' in window ? OffscreenCanvas : Canvas;
+const ImageCanvas = 'OffscreenCanvas' in globalThis ? OffscreenCanvas : Canvas;
 
 export default class TIFFFile extends BinaryFile {
   static get FileHeader() {
