@@ -1,5 +1,6 @@
 import { ImageProcessing } from './image/ImageProcessing.js';
 import processingSteps from './processing/index.js';
+import { parseImageFile } from './files/index.js';
 
 let processing;
 
@@ -14,7 +15,11 @@ const functions = {
       }
   },
   
-  loadImage(image) {
+  async loadImage(imagePath) {
+      const imageBlob = await fetch(imagePath);
+      const parsed = await parseImageFile(imageBlob.url, imageBlob);
+      const image = await parsed.getImageData();
+      await processing.loadImage(image);
       processing.loadImage(image);
   },
   

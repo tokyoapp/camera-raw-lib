@@ -1,7 +1,10 @@
 import { ImageEngine } from '../src/ImageEngine.js';
 import processingSteps from '../src/processing/index.js';
+import { wrapWorker } from '../src/worker.js';
 
-function makeUI(container, engine) {
+const worker = wrapWorker(new Worker('../src/worker.js', { type: 'module' }));
+
+function makeUI(container, worker) {
   for (let step of processingSteps) {
     for (let attr in step.attributes) {
       const attribute = step.attributes[attr];
@@ -22,11 +25,11 @@ function makeUI(container, engine) {
 
       slider.ondblclick = () => {
         slider.value = defaultValue;
-        engine.setAttribute(step.name + '.' + attr, slider.valueAsNumber);
+        worker.do('setAttribute', [step.name + '.' + attr, slider.valueAsNumber]);
       }
 
       slider.oninput = e => {
-        engine.setAttribute(step.name + '.' + attr, slider.valueAsNumber);
+        worker.do('setAttribute', [step.name + '.' + attr, slider.valueAsNumber]);
       }
 
       container.appendChild(slider);
@@ -48,10 +51,10 @@ function makeUI(container, engine) {
 
   document.body.appendChild(canvas);
 
-  const imageBlob = await fetch('../../res/_MG_2834.CR2');
-  const engine = new ImageEngine();
-  engine.setup(canvas);
-  engine.loadImage(imageBlob);
+  const offscreen = canvas.transferControlToOffscreen();
+  worker.do('init', [offscreen], [offscreen])
 
-  makeUI(container, engine);
+  makeUI(container, worker);
+
+  const image = await worker.do('loadImage', ['../../res/_MG_0001.CR3']);
 })()
