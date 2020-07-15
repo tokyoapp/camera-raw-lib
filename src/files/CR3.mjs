@@ -40,4 +40,8 @@ export default class CR3File extends BinaryFile {
     return container;
   }
 
+  getThumbnail() {
+    return new Blob([], { type: 'image/jpeg' });
+  }
+
 }

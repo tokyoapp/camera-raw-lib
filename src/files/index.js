@@ -4,9 +4,9 @@ import CR2File from './CR2.mjs';
 import CR3File from './CR3.mjs';
 import ARWFile from './ARW.mjs';
 import NEFFile from './NEF.mjs';
+import PNGFile from './PNG.mjs';
 
-export async function parseImageFile(filename, blob) {
-  const data = await blob.arrayBuffer();
+export async function parseImageFile(filename, data) {
   const parts = filename.split(".");
   const ending = parts[parts.length-1];
 
@@ -27,6 +27,9 @@ export async function parseImageFile(filename, blob) {
       break;
     case "NEF":
       FileType = NEFFile;
+      break;
+    case "PNG":
+      FileType = PNGFile;
       break;
     case "TIFF":
     case "TIF":

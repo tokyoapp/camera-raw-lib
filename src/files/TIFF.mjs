@@ -72,15 +72,12 @@ export default class TIFFFile extends BinaryFile {
   }
 
   static parseFile(file) {
-    const time = performance.now();
     // read file header
     const header = this.verifyFileHeader(file);
 
     this.parseIFDs(file, this.getValue(header, "ifdOffset"));
     this.parseMetaData(file);
     this.parseImages(file);
-
-    console.log('parseing took', performance.now() - time, 'ms');
   }
 
   static parseIFDs(file, offset) {
@@ -406,6 +403,10 @@ export default class TIFFFile extends BinaryFile {
 
   getImage(index = this.MAX_RES_IMAGE_INDEX) {
     return this._images[index];
+  }
+
+  async getThumbnail() {
+    return new Blob([this.buffer], { type: "image/tiff" });
   }
 
   async getImageData() {

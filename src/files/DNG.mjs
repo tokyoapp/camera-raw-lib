@@ -106,4 +106,8 @@ export default class DNGFile extends TIFFFile {
     image.imageData = pixelArray;
     image.type = "raw";
   }
+
+  async getThumbnail() {
+    return new Blob([this._images[2].imageData], { type: "image/png" });
+  }
 }

@@ -7,4 +7,8 @@ export default class CR2File extends DNGFile {
     image.imageData = image.strips[0];
     image.type = "jpeg";
   }
+
+  async getThumbnail() {
+    return new Blob([this._images[0].imageData], { type: "image/png" });
+  }
 }
