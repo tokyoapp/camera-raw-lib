@@ -1,4 +1,4 @@
-import { BinaryFile } from "../node_modules/binary-file-lib/index.mjs";
+import { BinaryFile } from "../node_modules/@luckydye/binary-file-lib/index.mjs";
 
 export default class PNGFile extends BinaryFile {
 

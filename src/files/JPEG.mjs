@@ -1,4 +1,4 @@
-import { BinaryFile } from '../node_modules/binary-file-lib/files/BinaryFile.mjs';
+import { BinaryFile } from '../node_modules/@luckydye/binary-file-lib/files/BinaryFile.mjs';
 
 export default class JPEG extends BinaryFile {
 

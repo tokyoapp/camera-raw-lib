@@ -1,5 +1,5 @@
 {
-  "name": "camera-raw-preview-lib",
+  "name": "@luckydye/camera-raw-lib",
   "version": "1.0.0",
   "description": "Fast Image Preview library for the web",
   "main": "index.js",
@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "binary-file-lib": "git+ssh://git@github.com/luckydye/binary-file-lib.git"
+    "@luckydye/binary-file-lib": "git+ssh://git@github.com/luckydye/binary-file-lib.git"
   }
 }
