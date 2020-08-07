@@ -1,4 +1,3 @@
-import { ImageEngine } from '../src/ImageEngine.js';
 import processingSteps from '../src/processing/index.js';
 import { wrapWorker } from '../src/worker.js';
 
@@ -52,7 +51,7 @@ function makeUI(container, worker) {
   document.body.appendChild(canvas);
 
   const offscreen = canvas.transferControlToOffscreen();
-  worker.do('init', [offscreen], [offscreen])
+  worker.do('init', [offscreen], [offscreen]);
 
   makeUI(container, worker);
 

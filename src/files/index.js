@@ -5,6 +5,7 @@ import CR3File from './CR3.mjs';
 import ARWFile from './ARW.mjs';
 import NEFFile from './NEF.mjs';
 import PNGFile from './PNG.mjs';
+import JPEGFile from './JPEG.mjs';
 
 export async function parseImageFile(filename, data) {
   const parts = filename.split(".");
@@ -30,6 +31,9 @@ export async function parseImageFile(filename, data) {
       break;
     case "PNG":
       FileType = PNGFile;
+      break;
+    case "JPG":
+      FileType = JPEGFile;
       break;
     case "TIFF":
     case "TIF":

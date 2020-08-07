@@ -1,6 +1,6 @@
-import { BinaryFile } from '../node_modules/@luckydye/binary-file-lib/files/BinaryFile.mjs';
+import { BinaryFile } from "@luckydye/binary-file-lib";
 
-export default class JPEG extends BinaryFile {
+export default class JPEGFile extends BinaryFile {
 
   static parseFile(file) {
     // read file header
@@ -29,6 +29,10 @@ export default class JPEG extends BinaryFile {
       }
       reader.readAsDataURL(blob); 
     })
+  }
+
+  async getThumbnail() {
+      return new Blob([this.buffer], { type: "image/jpg" });
   }
 
 }
