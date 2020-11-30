@@ -1,6 +1,6 @@
 # camera-raw-preview-lib
 
-## Features
+## Features (work in progress)
 
 - The *option* to use workers for image processing
 - Heavy use of WebGL for computing
