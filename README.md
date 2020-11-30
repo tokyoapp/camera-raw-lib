@@ -1,4 +1,4 @@
-# camera-raw-preview-lib
+# camera-raw-lib
 
 ## Features (work in progress)
 
