@@ -73,13 +73,13 @@ export class BinaryFile {
             return file;
         }
         
-        if(dataArray instanceof DataView || dataArray instanceof Buffer) {
+        if(dataArray instanceof DataView) {
             const file = new this();
             file.view = new DataView(dataArray.buffer, dataArray.byteOffset, dataArray.byteLength);
             return file;
         }
 
-        throw new Error('Could not create Binary file.');
+        throw new Error('Could not create Binary file. Data is not ArrayBuffer');
     }
 
     static concatBuffer(buffer1, buffer2) {
@@ -417,10 +417,11 @@ const typeMapping = {
         type: 'Int32',
         BYTES_PER_ELEMENT: Int32Array.BYTES_PER_ELEMENT,
     },
-    'long': {
-        type: 'BigInt64',
-        BYTES_PER_ELEMENT: BigInt64Array.BYTES_PER_ELEMENT,
-    },
+    // safari not supported
+    // 'long': {
+    //     type: 'BigInt64',
+    //     BYTES_PER_ELEMENT: BigInt64Array.BYTES_PER_ELEMENT,
+    // },
     'unsigned int': {
         type: 'Uint32',
         BYTES_PER_ELEMENT: Uint32Array.BYTES_PER_ELEMENT,

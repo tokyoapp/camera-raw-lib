@@ -1,4 +1,4 @@
-import DNGFile from "./DNG.mjs";
+import DNGFile from "./DNG";
 
 export default class NEFFile extends DNGFile {
   get type() { return "NEF"; }

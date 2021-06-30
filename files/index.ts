@@ -1,13 +1,14 @@
-import TIFFFile from './TIFF.ts';
-import DNGFile from './DNG.mjs';
-import CR2File from './CR2.mjs';
-import CR3File from './CR3.mjs';
-import ARWFile from './ARW.mjs';
-import NEFFile from './NEF.ts';
-import PNGFile from './PNG.ts';
-import JPEGFile from './JPEG.ts';
+import TIFFFile from './TIFF';
+import DNGFile from './DNG';
+import CR2File from './CR2';
+import CR3File from './CR3';
+import ARWFile from './ARW';
+import NEFFile from './NEF';
+import PNGFile from './PNG';
+import JPEGFile from './JPEG';
+import { BinaryFile } from '../lib/binary-file-lib/files/BinaryFile';
 
-export async function parseImageFile(filename, data) {
+export async function parseRawImageFile(filename: string, blob: Blob) {
   const parts = filename.split(".");
   const ending = parts[parts.length-1];
 
@@ -29,19 +30,12 @@ export async function parseImageFile(filename, data) {
     case "NEF":
       FileType = NEFFile;
       break;
-    case "PNG":
-      FileType = PNGFile;
-      break;
-    case "JPG":
-      FileType = JPEGFile;
-      break;
-    case "TIFF":
-    case "TIF":
-      FileType = TIFFFile;
-      break;
   }
 
-  const file = new FileType(data);
-  file.file = filename;
-  return file;
+  if(!FileType) {
+    throw new Error('File type not supported.');
+  }
+
+  const arrayBuffer = await blob.arrayBuffer();
+  return new FileType(arrayBuffer);
 }

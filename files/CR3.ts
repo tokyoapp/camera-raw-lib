@@ -3,6 +3,7 @@ import RawImageData from "./RawImageData";
 import TIFFFile from "./TIFF";
 
 const UUID_PRVW = 'eaf42b5e 1c98 4b88 b9fb b7dc406e4d16';
+const UUID_MOOV = '85c0b687 820f 11e0 8111 f4ce462b6a48';
 
 function matchUUID(uuid, UUID) {
   return uuid == UUID.replace(/\W/g, '');
@@ -81,7 +82,7 @@ export default class CR3File extends BinaryFile {
     const fileTypeBox = this.unserialize(file, 0, this.BoxHeader, false);
     const fileTyp = this.unserialize(file, fileTypeBox.byteOffset, this.FileTypeBox, true);
 
-    if(this.getValue(fileTyp, 'filetype') == 'crx') {
+    if (this.getValue(fileTyp, 'filetype') == 'crx') {
       return this.getValue(fileTypeBox, 'size');
     } else {
       throw new Error('File type not recognized');
@@ -89,17 +90,35 @@ export default class CR3File extends BinaryFile {
   }
 
   static parseFile(file) {
-    const time = performance.now();
     // read file header
     const offset = this.verifyFileHeader(file);
     this.unserializeBoxes(file, offset);
   }
 
   static unserializeBoxes(file, offset) {
+
     const moovBox = this.unserialize(file, offset, this.BoxHeader, false);
+    console.log(moovBox);
+
+    {
+      const uuid = this.unserialize(file, moovBox.byteOffset, { uuid: 'byte[16]' });
+      const uuidData = this.getValue(uuid, 'uuid').map(v => v.toString(16)).join("");
+
+      console.log(UUID_MOOV, uuidData);
+      
+
+      if (matchUUID(uuidData, UUID_MOOV)) {
+        console.log(uuidData);
+      }
+    }
+
+
+    // const uuid = this.unserialize(file, previewBox.byteOffset, { uuid: 'byte[16]' });
+    // const uuidData = this.getValue(uuid, 'uuid').map(v => v.toString(16)).join("");
+
     // const moov = this.unserialize(file, moovBox.byteOffset, this.MoovBox, false);
     // const tags = this.parseTags(file.view, moov.byteOffset, 3);
-    // console.log(tags);
+    // console.log(moov);
 
     const xpacketOffset = offset + this.getValue(moovBox, 'size');
     const xpacketBox = this.unserialize(file, xpacketOffset, this.BoxHeader, false);
@@ -110,21 +129,29 @@ export default class CR3File extends BinaryFile {
     const uuid = this.unserialize(file, previewBox.byteOffset, { uuid: 'byte[16]' });
     const uuidData = this.getValue(uuid, 'uuid').map(v => v.toString(16)).join("");
 
-    if(matchUUID(uuidData, UUID_PRVW)) {
+    if (matchUUID(uuidData, UUID_PRVW)) {
       const entry = this.unserialize(file, uuid.byteOffset, this.PRVWTag, false);
-
-      console.log(entry);
 
       const imageData = this.getValue(entry, "imageData");
       file.imageData = new Uint8Array(imageData);
     }
 
-    // const mdatOffset = previewOffset + this.getValue(previewBox, 'size');
+    // const freeOffset = previewOffset + this.getValue(previewBox, 'size');
+    // const freeBox = this.unserialize(file, freeOffset, this.BoxHeader, false);
+    // console.log('free', freeBox);
+
+    // const mdatOffset = freeOffset + this.getValue(freeBox, 'size');
     // const mdatBox = this.unserialize(file, mdatOffset, this.BoxHeader, false);
+    // console.log('mdat', mdatBox);
+
+    // const whatOffset = mdatOffset + this.getValue(mdatBox, 'size');
+    // const whatBox = this.unserialize(file, whatOffset, this.BoxHeader, false);
+    // console.log('what', whatBox);
+    
 
     // if(this.getValue(mdatBox, 'type') == 'mdat') {
     //   console.log(mdatBox);
-      
+
     //   const mdat = this.unserialize(file, mdatBox.byteOffset, { data: 'byte[256]' });
     //   const imageData = this.getValue(mdat, "data");
     //   // file.imageData = new Uint8Array(imageData);
@@ -141,6 +168,7 @@ export default class CR3File extends BinaryFile {
       unknown3: 'short',
       width: 'short',
       height: 'short',
+      dasd: 'byte[2]',
       imageByteSize: 'int',
       imageData: 'byte[imageByteSize]',
     }
@@ -163,7 +191,7 @@ export default class CR3File extends BinaryFile {
 
       const tagStruct = TAG_STRUCTS[tagType];
 
-      if(!tagStruct) {
+      if (!tagStruct) {
         console.error('failed at tag', tagType);
         throw new Error('failed parsing file');
       }

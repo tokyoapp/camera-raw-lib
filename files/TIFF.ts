@@ -1,12 +1,12 @@
 import { BinaryFile } from "../lib/binary-file-lib/files/BinaryFile";
-import RawImageData from "./RawImageData.mjs";
+import RawImageData from "./RawImageData";
 import {
   Compression, 
   FIELDS, 
   FIELD_TYPE,
   PhotometricInterp,
   Subfile
-} from "./TagTypes.mjs";
+} from "./TagTypes";
 
 class Canvas {
   constructor() {
@@ -446,7 +446,7 @@ export default class TIFFFile extends BinaryFile {
 
     const orientation = image.orientation;
 
-    const container = new RawImageData({
+    const container: RawImageData = new RawImageData({
       orientation,
       format,
       bitsPerSample,

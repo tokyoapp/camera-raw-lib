@@ -1,10 +1,10 @@
-import TIFFFile from "./TIFF.ts";
+import TIFFFile from "./TIFF";
 import {
   Compression,
   PhotometricInterp,
   PlanarConfig,
   CFAColor,
-} from "./TagTypes.ts";
+} from "./TagTypes";
 
 export default class DNGFile extends TIFFFile {
   get type() { return "DNG"; }
