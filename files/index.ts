@@ -1,11 +1,11 @@
-import TIFFFile from './TIFF.mjs';
+import TIFFFile from './TIFF.ts';
 import DNGFile from './DNG.mjs';
 import CR2File from './CR2.mjs';
 import CR3File from './CR3.mjs';
 import ARWFile from './ARW.mjs';
-import NEFFile from './NEF.mjs';
-import PNGFile from './PNG.mjs';
-import JPEGFile from './JPEG.mjs';
+import NEFFile from './NEF.ts';
+import PNGFile from './PNG.ts';
+import JPEGFile from './JPEG.ts';
 
 export async function parseImageFile(filename, data) {
   const parts = filename.split(".");

@@ -8,7 +8,5 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@luckydye/binary-file-lib": "git+ssh://git@github.com/luckydye/binary-file-lib.git"
-  }
+  "dependencies": {}
 }

@@ -1,6 +1,6 @@
-import { BinaryFile } from "../../node_modules/@luckydye/binary-file-lib/index.mjs";
-import RawImageData from "./RawImageData.mjs";
-import TIFFFile from "./TIFF.mjs";
+import { BinaryFile } from "../lib/binary-file-lib/files/BinaryFile";
+import RawImageData from "./RawImageData";
+import TIFFFile from "./TIFF";
 
 const UUID_PRVW = 'eaf42b5e 1c98 4b88 b9fb b7dc406e4d16';
 

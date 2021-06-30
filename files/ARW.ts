@@ -1,4 +1,4 @@
-import DNGFile from "./DNG.mjs";
+import DNGFile from "./DNG.ts";
 
 export default class ARWFile extends DNGFile {
   get type() { return "ARW"; }

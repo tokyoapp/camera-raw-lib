@@ -1,4 +1,12 @@
 export default class RawImageData {
+
+    orientation = null;
+    format = null;
+    bitsPerSample = null;
+    data = null;
+    width = null;
+    height = null;
+
     constructor(objectData) {
         this.orientation = objectData.orientation;
         this.format = objectData.format;

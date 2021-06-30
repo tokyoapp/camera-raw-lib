@@ -1,4 +1,4 @@
-import { BinaryFile } from "@luckydye/binary-file-lib";
+import { BinaryFile } from "../lib/binary-file-lib/files/BinaryFile";
 
 export default class PNGFile extends BinaryFile {
 

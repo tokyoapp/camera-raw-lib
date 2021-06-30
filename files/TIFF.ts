@@ -1,4 +1,4 @@
-import { BinaryFile } from "../../node_modules/@luckydye/binary-file-lib/index.mjs";
+import { BinaryFile } from "../lib/binary-file-lib/files/BinaryFile";
 import RawImageData from "./RawImageData.mjs";
 import {
   Compression, 

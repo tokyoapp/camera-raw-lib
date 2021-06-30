@@ -1,4 +1,4 @@
-import DNGFile from "./DNG.mjs";
+import DNGFile from "./DNG.ts";
 
 export default class CR2File extends DNGFile {
   get type() { return "CR2"; }
